@@ -58,6 +58,3 @@ def check_map(symbol):
 
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
-
-
-check_map('TIME')
