@@ -1,11 +1,14 @@
 import os
+import json
 
 from requests import Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
-import json
+from init_logging import initialize_logging
+
 
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv("BASE_URL")
+logger = initialize_logging()
 
 
 def fetch_price(**kwargs):
@@ -32,9 +35,11 @@ def fetch_price(**kwargs):
             ticker = "id"
 
         price = round(data["data"][params[ticker]]["quote"]["USD"]["price"], 4)
-        return price
+        logger.info(f"Successfully retrieved price for {params[ticker]}")
     except (ConnectionError, Timeout, TooManyRedirects) as e:
-        print(e)
+        logger.info(e)
+
+    return price
 
 
 def check_map(symbol):
@@ -54,7 +59,10 @@ def check_map(symbol):
         response = session.get(url, params=params)
         data = json.loads(response.text)
         symbol_map = data['data']
-        return symbol_map
+
+        logger.info(f"Successfully retrieved map symbol for {symbol}")
 
     except (ConnectionError, Timeout, TooManyRedirects) as e:
-        print(e)
+        logger.info(e)
+
+    return symbol_map

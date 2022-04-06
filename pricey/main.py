@@ -1,18 +1,17 @@
 import os
 
+from init_logging import initialize_logging
 from fetch_data import fetch_price, check_map
 from discord.ext import commands
 
 
 def main():
-
-    bot = commands.Bot(command_prefix='!')
-
     TOKEN = os.getenv('DISCORD_TOKEN')
+    bot = commands.Bot(command_prefix='!')
 
     @bot.event
     async def on_ready():
-        print(f'{bot.user.name} has connected to Discord!')
+        logger.info(f'{bot.user.name} has connected to Discord!')
 
     @bot.command(name='price')
     async def get_price(ctx, symbol):
@@ -39,10 +38,13 @@ def main():
                 response = fetch_price(symbol=ticker)
                 await ctx.send(f"{ticker}'s current price is ${response}")
         except Exception as e:
+            logger.info(f"Unable to retrieve data for {symbol}")
+            logger.info(f"Error: {e} not a valid symbol")
             await ctx.send(f'Unable to retrieve data for {symbol}')
 
     bot.run(TOKEN)
 
 
 if __name__ == '__main__':
+    logger = initialize_logging()
     main()
