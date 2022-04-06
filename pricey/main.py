@@ -5,8 +5,11 @@ from fetch_data import fetch_price, check_map
 from discord.ext import commands
 
 
+TOKEN = os.getenv("DISCORD_TOKEN")
+
+
 def main():
-    TOKEN = os.getenv("DISCORD_TOKEN")
+
     bot = commands.Bot(command_prefix="!")
 
     @bot.event
@@ -32,14 +35,18 @@ def main():
                 )
 
                 token_name = message_response.content
+
                 options = {k.lower(): v for k, v in options.items()}
                 ticker_id = str(options[token_name.lower()])
+
                 response = fetch_price(id=ticker_id)
                 await ctx.send(f"{token_name}'s current price is ${response}")
+
             else:
                 ticker = symbol.upper()
                 response = fetch_price(symbol=ticker)
                 await ctx.send(f"{ticker}'s current price is ${response}")
+
         except Exception as e:
             logger.info(f"Unable to retrieve data for {symbol}")
             logger.info(f"Error: {e} not a valid symbol")
