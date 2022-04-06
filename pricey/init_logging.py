@@ -6,7 +6,7 @@ from datetime import date
 
 
 def initialize_logging():
-    log_folder = os.getenv('LOG_FOLDER')
+    log_folder = os.getenv("LOG_FOLDER")
 
     if not Path(log_folder).exists():
         print(f"log_folder not found, creating => {log_folder}")
@@ -19,8 +19,7 @@ def initialize_logging():
         format="%(asctime)s %(name)s %(levelname)s %(lineno)d >%(message)s",
         datefmt="%Y-%m-%d %I:%M:%S %p",
         level=logging.INFO,
-        handlers=[logging.FileHandler(
-            str(logFilePath)), logging.StreamHandler()]
+        handlers=[logging.FileHandler(str(logFilePath)), logging.StreamHandler()],
     )
 
     logger = logging.getLogger(__name__)

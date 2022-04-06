@@ -36,16 +36,17 @@ def fetch_price(**kwargs):
 
         price = round(data["data"][params[ticker]]["quote"]["USD"]["price"], 4)
         logger.info(f"Successfully retrieved price for {params[ticker]}")
+
+        return price
+
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         logger.info(e)
-
-    return price
 
 
 def check_map(symbol):
     url = f"{BASE_URL}/map"
 
-    params = {'symbol': symbol}
+    params = {"symbol": symbol}
 
     headers = {
         "Accepts": "application/json",
@@ -58,11 +59,11 @@ def check_map(symbol):
     try:
         response = session.get(url, params=params)
         data = json.loads(response.text)
-        symbol_map = data['data']
+        symbol_map = data["data"]
 
         logger.info(f"Successfully retrieved map symbol for {symbol}")
 
+        return symbol_map
+
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         logger.info(e)
-
-    return symbol_map
